@@ -1,0 +1,29 @@
+@import './vars.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    font-family: sans-serif;
+    font-weight: $font-weight;
+    font-size: $font-size;
+    color: white; 
+}
+
+body, ul, ol, h1, h2, h3, h4 {
+    margin : 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+input, button {
+    outline: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
