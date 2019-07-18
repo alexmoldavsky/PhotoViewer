@@ -8,6 +8,10 @@
     display: flex;
     align-items: center;
 
+    &:hover {
+        border: 1px solid gray;
+    }
+
 
     &__input {
         width: 92%;

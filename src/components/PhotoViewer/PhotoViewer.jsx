@@ -2,19 +2,24 @@
 import React, { Component } from 'react';
 import { PhotoItem } from '../PhotoItem';
 import { Delay } from '../../scripts/utils.js';
+
 import './PhotoViewer.scss';
 
 export class PhotoViewer extends Component {
 
     state = {
         photos: [],
-        pageIndex: 1
+        pageIndex: 1,
+        needUpdate: false
     }
 
     render() {
-        return <div className='photo-viwer'>
-            {this.renderPhotos()}
+        return <div className='photo-viewer'>
+            <div className="photo-wrapper">
+                {this.renderPhotos()}
+            </div>
             <button className="load-more-btn" onClick={Delay(this.loadMore)}>more...</button>
+            
         </div>
         
     }
@@ -25,15 +30,26 @@ export class PhotoViewer extends Component {
     }
 
     renderPhotos() {
-       return this.state.photos.map(elem => <PhotoItem photo={elem}/>)
+       return this.state.photos.map((elem, i) => <PhotoItem key={elem.id} 
+                                                        photo={elem} 
+                                                        isLogged={this.props.isLogged}
+                                                        onLike={this.onLike}
+                                                        index={i}/>)
     }
+
+    
 
     componentDidMount() {
         this.getPhotos();   
+      
     }
     
     getPhotos = () => {
         
+    }
+
+    onLike = () => {
+
     }
 
     

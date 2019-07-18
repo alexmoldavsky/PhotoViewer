@@ -12,3 +12,5 @@ export function Delay(fn, time = 1000) {
 }
 
 
+
+

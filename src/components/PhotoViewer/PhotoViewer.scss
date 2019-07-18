@@ -1,10 +1,35 @@
+.photo-viewer {
+    width: 100%;
 
+    .photo-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-gap: 0 20px;
+        place-items: center;
+        margin: 0 auto;
+        grid-auto-rows: 10px;
+        max-width: 1240px;
+   }
 
-.load-more-btn {
-    outline: none;
-    width: 300px;
-    height: 20px;
-    border: 0;
-    border-radius: 5px;
-    margin: 0 auto;
+    .load-more-btn {
+        display: block;
+        outline: none;
+        width: 300px;
+        height: 20px;
+        border: 0;
+        border-radius: 5px;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        font-weight: 600;
+
+        &:hover {
+            border: 2px solid grey;
+        }
+        
+    }
 }
+
+
+

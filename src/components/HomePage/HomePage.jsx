@@ -3,41 +3,36 @@ import { Api } from '../../scripts/api.js';
 
 export class HomePage extends PhotoViewer {
 
-      getPhotos = async () => {
+      getPhotos = async (replacePhotos = false) => {
        
         const headers = {};
-        if (this.props.isLogged) {
-            headers.Authorization = 'Bearer ' + localStorage.getItem('unsplshToken')
-        }
-
         const api = new Api();
+
+        if (this.props.isLogged) {
+            headers.Authorization = 'Bearer ' + api.token
+        } 
+
+        
         try {
-           const response = await api.getFromAPI(`/photoss?page=${this.state.pageIndex}`, headers);
-           this.setState( {photos: this.state.photos.concat(JSON.parse(response))} );
-        } catch(e) {
+            const response = await api.getFromAPI(`/photos?page=${this.state.pageIndex}`, headers);
+            if (replacePhotos) {
+                this.setState( { photos: JSON.parse(response) }  );
+            } else this.setState( { photos: this.state.photos.concat(JSON.parse(response)) } );
+
+
+        } catch (e) {
             console.log(e)
         } 
     } 
 
-/*      getPhotos = () => {
+    //reloading photos after auth status changed
+    componentDidUpdate(prevProps) {
        
-        const headers = {};
-        if (this.props.isLogged) {
-            headers.Authorization = 'Bearer ' + localStorage.getItem('unsplshToken')
+
+        if (prevProps.isLogged !== this.props.isLogged) {
+            this.getPhotos(true); 
         }
-
-        const api = new Api();
-        api.getFromAPI(`/photos?page=${this.state.pageIndex}`, headers
-        ).then(
-            (response) => {
-                this.setState( {photos: this.state.photos.concat(JSON.parse(response))} )
-                
-
-        }).catch(
-            (error, message) => {
-                console.log(error+' '+message);
-            }
-        );
-    }  */
-   
+        
+    }
+  
 }
