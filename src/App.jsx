@@ -3,6 +3,10 @@ import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { Nav } from './components/Nav';
 import { HomePage } from './components/HomePage';
 import { SearchPage } from './components/SearchPage';
+import { FavoritesPage } from './components/FavoritesPage';
+import { PhotoModal } from './components/PhotoModal';
+
+
 import { Api } from './scripts/api.js';
 import './App.scss';
 
@@ -11,7 +15,9 @@ export class App extends Component {
 
     state = {
         isLogged: false,
+        userID: '',
         profile: {},
+        lastLocation: ''
     }
     
     render() {
@@ -25,72 +31,84 @@ export class App extends Component {
                 </header>
                 <main>
                     <Switch>
-                        <Route exact={true} path="/" render={props => <HomePage {...props} 
+                        <Route exact={true} path="/" render={(props) => <HomePage {...props} 
+                                                                            isLogged={this.state.isLogged}
+          
+                                                                        />} />
+                        <Route path="/search/:query" render={(props) => <SearchPage {...props} 
+                                                                            isLogged={this.state.isLogged}
+                                  
+                                                                        />} />
+                        <Route path="/photo/:id" render={(props) => <PhotoModal {...props} 
+                                                                            isLogged={this.state.isLogged}
+                                                                            backLocation={this.state.lastLocation}
+                                                                        />} />                       
+                        <Route path="/favorites" render={(props) => <FavoritesPage {...props} 
                                                                             isLogged={this.state.isLogged}
                                                                         />} />
-                        <Route path="/search/:query" render={props => <SearchPage {...props} 
-                                                                            isLogged={this.state.isLogged}
-                                                                        />} />
-                        <Route path="/favorites" component={() => <h2 style={{color: 'black'}}>Favorites page!</h2>} />
-                        <Route path="/about" component={() => <h2 style={{color: 'black'}}>About page!</h2>} />
+                        <Route path="/about" component={() => <h2 style={{color: 'black'}}>Photo viewer</h2>} />
                         <Route path="/404" component={() => <h1 style={{color: 'black'}}>Not found!!</h1>} />
                         <Redirect to="/404" />
                     </Switch>
                 </main>
+
             </div>
         </Router>
+        
     }  
+
+    
 
     componentDidMount() {
         this.checkAuth();
     }
 
     onLogin = () => {
+        const api = new Api();
         if (this.state.isLogged) {
-            localStorage.removeItem('unsplshToken');
+            api.deleteToken();
             this.setState({isLogged: false, profile: {}});
         } else {
-            const api = new Api();
             api.login();
         }
         
     }
 
-    checkAuth = () => {
+    checkAuth = async () => {
 
         const headers = {};
-        const token = localStorage.getItem('unsplshToken');
+        const api = new Api();
+
+        const token = api.token;
 
         if (token) {
             //trying to access server with saved token
             headers.Authorization = 'Bearer ' + token;
-            const api = new Api();
-            api.getFromAPI('/me', headers
-            ).then(
-                (response) => {
-                    //yes, we logged
-                    this.setState({ isLogged: true, profile: JSON.parse(response) });
+            
+            try {
+                const response = await api.getFromAPI('/me', headers);
+                //yes, we logged
+                this.setState({ isLogged: true, 
+                                profile: JSON.parse(response) 
+                            });
+            } catch (e) {
+                //token or network is not ok - removing auth info
+                console.log(e);
+                api.deleteToken();
+                this.setState({ isLogged: false, profile: {} });
+                // this.onLogin();
+            };
+            
 
-
-                }).catch(
-                    (error) => {
-                        //token or network is not ok - removing auth info
-                        console.log(error);
-                        localStorage.removeItem('unsplshToken');
-                        this.setState({isLogged: false, profile: {}});
-                       // this.onLogin();
-                    },
-                );
         } else this.getToken();
     }
 
-    getToken() {
+    getToken = async () => {
 
         const getTokenFromURL = () => {
             let res = window.location.href;
             res = res.match(/code=([a-z0-9]+)(#|&|\/)/i);
             if (res && res.length > 1) {
-               console.log(res); 
                return res[1]
             }
         }
@@ -99,22 +117,21 @@ export class App extends Component {
         const authCode = getTokenFromURL();
         if (authCode) {
             const api = new Api();
-            api.postCodeToGetToken(authCode).then(
-            (response) => {
+            try {
+                const response = await api.postCodeToGetToken(authCode);
                 //saving new token and then checking
-                localStorage.setItem('unsplshToken', JSON.parse(response).access_token);
-                this.checkAuth();
+                api.token = JSON.parse(response).access_token;
                 console.log('token saved');
-            }).catch(
-                (error) => {
-                    console.log(error);
-                },
-            );
+            } catch(e) {
+                console.log(e);
+            }
+            
+            this.checkAuth();
+            
+            
         } else console.log('can\'t get token');
     }
  
-    
-    
 
 }
 

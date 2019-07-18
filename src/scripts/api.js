@@ -8,16 +8,16 @@ export class Api {
             authURL: 'https://unsplash.com/oauth/authorize',
             tokenURL: 'https://unsplash.com/oauth/token',
             authRedirectUrl: 'http://localhost:3000',
-            authScope: 'public+read_user'
+            authScope: 'public+read_user+write_likes'
         }
     }
 
     get serverSettings() { return this._serverSettings; }
 
     getFromAPI(path, headers = {}) {
-        if (!headers.Authorization) {
+         if (!headers.Authorization) {
             headers.Authorization = 'Client-ID ' + this._serverSettings.accessKey;
-        }
+        } 
 
         return this.request(this._serverSettings.apiDomain, path, 'GET', headers, {})
     }
@@ -32,10 +32,21 @@ export class Api {
         return this.request(this._serverSettings.apiDomain, path, 'POST', headers, content)
     }
 
+    deleteToAPI(path, headers = {}, content) {
+        if (!headers.Authorization) {
+            headers.Authorization = 'Client-ID ' + this._serverSettings.accessKey;
+        }
+        if (!headers['Content-Type']) {
+            headers['Content-Type'] = 'application/json; charset=utf-8';
+        }
+
+        return this.request(this._serverSettings.apiDomain, path, 'DELETE', headers, content)
+    }
+
     request(domain, path, method, headers, content) {
         
         
-        return new Promise((onSuccess, onError) => {
+        return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
 
             xhr.open(method, domain + path);
@@ -48,11 +59,11 @@ export class Api {
 
             const stateChangeHandler = () => {
                 if (xhr.readyState === 4) {
-                    if (xhr.status !== 200) {
-                        onError(xhr.status+' '+JSON.parse(xhr.responseText).errors);
-                    }
+                    if (xhr.status >= 200 || xhr.status < 300) {
+                        resolve(xhr.response);
+                    } else reject(xhr.status+' '+JSON.parse(xhr.responseText).errors);
 
-                    onSuccess(xhr.response);
+                    
                 }
             }
 
@@ -81,6 +92,53 @@ export class Api {
        
         contentJSON = JSON.stringify(content);         
         return this.request(this._serverSettings.tokenURL, '', 'POST', headers, contentJSON)
+    }
+
+    set token(token) {
+        if (token) {
+            localStorage.setItem('unsplshToken', token);
+        }
+    }
+
+    get token() { return localStorage.getItem('unsplshToken'); }
+
+    deleteToken() {
+        localStorage.removeItem('unsplshToken');
+    }
+
+    addToCollection(photo) {
+        if (photo) {
+            const collection = this.getCollection();
+            if (!collection.find((savedPhoto) => savedPhoto.id === photo.id)) {
+                localStorage.setItem('unsplshCollection', JSON.stringify(collection.concat(photo)));
+            }
+        }
+    }
+
+    deleteFromCollection(photo) {
+        if (photo) {
+            localStorage.setItem('unsplshCollection', JSON.stringify(this.getCollection().filter((savedPhoto) => savedPhoto.id !== photo.id)));
+        }
+    }
+
+    getCollection(page, itemsPerPage = 10) {
+ 
+        let collection = [];
+        const storage = localStorage.getItem('unsplshCollection');
+         
+        if (storage) {
+
+            collection = JSON.parse(storage);
+            if (page >= 1) {
+                //load array by parts
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+                collection = collection.slice(start, end);
+
+            }
+        }
+     //   console.log(collection);
+        return collection;
     }
 
 

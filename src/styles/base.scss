@@ -9,7 +9,7 @@ html {
     font-family: sans-serif;
     font-weight: $font-weight;
     font-size: $font-size;
-    color: white; 
+    color: black; 
 }
 
 body, ul, ol, h1, h2, h3, h4 {
@@ -26,4 +26,9 @@ input, button {
     border: 0;
     padding: 0;
     margin: 0;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
 }

@@ -1,0 +1,141 @@
+@mixin crossHalf($angle) {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate($angle+deg);
+    width: 4px;
+    height: 100%;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, .6);
+  }
+
+.photo-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 6;
+    cursor: zoom-out;
+
+    .close_bnt {
+        position: fixed;
+        right: 15px;
+        top: 15px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+
+        &:before {
+           @include crossHalf(-45);
+        }
+
+        &:after {
+            @include crossHalf(45);
+        }
+
+    }
+
+    .photo-modal-view {
+        position: relative;
+        margin-top: 50px;
+        left: 50%;
+        transform: translateX(-50%); 
+        background-color: white;
+        border-radius: 15px; 
+        width: 90%;
+        min-height: 90%;
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+
+        .details-panel {
+            width: 100%;
+            height: 10%;
+            flex-basis: 10%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 10px;
+
+            &__photo-info {
+                display: flex;
+                align-items: center;
+                width: 80%;
+
+                .author {
+
+                    display: flex;
+                    align-items: center;
+                    font-size: 12px;
+                    margin-left: 15px;
+
+                    &__ava {
+                        border-radius: 50%;
+                        width: 32px;
+                    }
+
+                    &__name {
+                        margin-left: 10px;
+
+                        .name {
+                            margin-right: 10px;
+                        }
+                    }
+
+                }
+
+                .description {
+                    margin-left: 20px;
+                    font-weight: 500;
+                    font-size: 12px;
+                    
+                }
+            }
+
+            &__likes {
+                display: flex;
+                align-items: center;
+                margin-right: 50px;
+
+                .likes-count {
+                    margin-right: 10px;
+                    font-size: 12px;
+                }
+
+                .likes-icon {
+                    width: 32px;
+                    height: 32px;
+                    cursor: pointer;
+
+                    > img {
+                        width: 100%;
+                    }
+                }
+
+            }
+        }
+
+        .photo-panel {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .photo-wrapper {
+                display: flex;
+                justify-content: center;
+                flex-basis: 90%;
+                max-width: 1080px;
+
+                &__photo {
+                    width: 100%;
+                }
+
+                
+
+            }
+        }
+    }
+
+}
