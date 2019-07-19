@@ -4,6 +4,7 @@ import { Nav } from './components/Nav';
 import { HomePage } from './components/HomePage';
 import { SearchPage } from './components/SearchPage';
 import { FavoritesPage } from './components/FavoritesPage';
+import { AboutPage } from './components/AboutPage';
 import { PhotoModal } from './components/PhotoModal';
 
 
@@ -29,7 +30,7 @@ export class App extends Component {
                         onLogin={this.onLogin}
                     />
                 </header>
-                <main>
+                <main className="main"> 
                     <Switch>
                         <Route exact={true} path="/" render={(props) => <HomePage {...props} 
                                                                             isLogged={this.state.isLogged}
@@ -41,12 +42,12 @@ export class App extends Component {
                                                                         />} />
                         <Route path="/photo/:id" render={(props) => <PhotoModal {...props} 
                                                                             isLogged={this.state.isLogged}
-                                                                            backLocation={this.state.lastLocation}
+                                                                         
                                                                         />} />                       
                         <Route path="/favorites" render={(props) => <FavoritesPage {...props} 
                                                                             isLogged={this.state.isLogged}
                                                                         />} />
-                        <Route path="/about" component={() => <h2 style={{color: 'black'}}>Photo viewer</h2>} />
+                        <Route path="/about" component={AboutPage} />
                         <Route path="/404" component={() => <h1 style={{color: 'black'}}>Not found!!</h1>} />
                         <Redirect to="/404" />
                     </Switch>

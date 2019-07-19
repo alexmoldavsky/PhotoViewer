@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-//import { Delay } from '../../scripts/utils.js';
 import searchIcon from '../../assets/images/search.png';
 import './SearchForm.scss';
 
