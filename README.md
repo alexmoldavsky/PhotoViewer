@@ -5,6 +5,8 @@ To use PhotoViewer:
 2. In ./scripts/api.js : 
   - enter your Unsplash project api keys: serverSettings.accessKey and serverSettings.secretKey
   - check your app root catalogue in serverSettings.authRedirectUrl for oAuth redirect  
+  
+Requirements: https://docs.google.com/document/d/1zGu8UXHE3ygbgUKie6qkL25t2EJg0_cpk9H1PQveOfw/edit  
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
