@@ -1,3 +1,12 @@
+To use PhotoViewer:
+1. In https://unsplash.com/oauth/applications
+  - be sure that your have application created
+  - enter oAuth redirect URL (it must be your app root catalogue) and mark public, read_user, write_likes permissions (or all of them) in section Redirect URI & Permissions
+2. In ./scripts/api.js : 
+  - enter your Unsplash project api keys: serverSettings.accessKey and serverSettings.secretKey
+  - check your app root catalogue in serverSettings.authRedirectUrl for oAuth redirect  
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
