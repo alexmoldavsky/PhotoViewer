@@ -49,6 +49,7 @@ class PhotoItem extends PureComponent {
                     </div>
                 </div>
             </div>
+            
 
         </div>
     }

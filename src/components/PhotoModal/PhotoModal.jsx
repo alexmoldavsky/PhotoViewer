@@ -54,6 +54,7 @@ export class PhotoModal extends Component {
                 </div>
             </div>
         </div>
+
     } 
 
     componentDidMount() {

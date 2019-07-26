@@ -19,9 +19,8 @@ export class PhotoViewer extends Component {
                 {this.renderPhotos()}
             </div>
             <button className="load-more-btn" onClick={Delay(this.loadMore)}>more...</button>
-            
         </div>
-        
+       
     }
 
     loadMore = () => {

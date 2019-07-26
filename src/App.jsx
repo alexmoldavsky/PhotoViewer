@@ -6,8 +6,6 @@ import { SearchPage } from './components/SearchPage';
 import { FavoritesPage } from './components/FavoritesPage';
 import { AboutPage } from './components/AboutPage';
 import { PhotoModal } from './components/PhotoModal';
-
-
 import { Api } from './scripts/api.js';
 import './App.scss';
 
@@ -16,9 +14,7 @@ export class App extends Component {
 
     state = {
         isLogged: false,
-        userID: '',
         profile: {},
-        lastLocation: ''
     }
     
     render() {
@@ -30,6 +26,7 @@ export class App extends Component {
                         onLogin={this.onLogin}
                     />
                 </header>
+                
                 <main className="main"> 
                     <Switch>
                         <Route exact={true} path="/" render={(props) => <HomePage {...props} 
@@ -41,20 +38,26 @@ export class App extends Component {
                                   
                                                                         />} />
                         <Route path="/photo/:id" render={(props) => <PhotoModal {...props} 
-                                                                            isLogged={this.state.isLogged}
+                                                                            isLogged={this.state.isLogged} />} />
+
+                                                                                          
                                                                          
-                                                                        />} />                       
+                                                                                               
                         <Route path="/favorites" render={(props) => <FavoritesPage {...props} 
                                                                             isLogged={this.state.isLogged}
                                                                         />} />
                         <Route path="/about" component={AboutPage} />
                         <Route path="/404" component={() => <h1 style={{color: 'black'}}>Not found!!</h1>} />
-                        <Redirect to="/404" />
-                    </Switch>
-                </main>
+                        <Redirect to="/404" /> 
 
+                        
+                    </Switch>
+                     
+                </main>
             </div>
+           
         </Router>
+
         
     }  
 

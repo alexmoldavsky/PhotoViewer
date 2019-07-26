@@ -1,10 +1,11 @@
 const serverSettings = {
-    accessKey: '346e102023bddc455f1023e8a1604671b6194576c97ca6ab35e547dc89ec7da8',
-    secretKey: '1792aadb481dabf05ec0e01916fef2003d17c8b0214f0cec04087df4e14e122f',
+    accessKey: 'access key here',
+    secretKey: 'secret key here',
+    authRedirectUrl: 'http://localhost:3000', //app root catalogue
+    //--------------------
     apiDomain: 'https://api.unsplash.com',
     authURL: 'https://unsplash.com/oauth/authorize',
     tokenURL: 'https://unsplash.com/oauth/token',
-    authRedirectUrl: 'http://localhost:3000',
     authScope: 'public+read_user+write_likes'
 }
 
